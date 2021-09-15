@@ -6,7 +6,7 @@ Este App foi desenvolvido como teste para vaga de desenvolvedor React Native par
 
 ![TypeScript](https://img.shields.io/badge/-TypeScript-black?style=flat-square&logo=typescript)
 ![JavaScript](https://img.shields.io/badge/-JavaScript-black?style=flat-square&logo=javascript)
-![ReactNative](https://img.shields.io/badge/-React-black?style=flat-square&logo=react)
+![ReactNative](https://img.shields.io/badge/-ReactNative-black?style=flat-square&logo=react)
 ![GitHub](https://img.shields.io/badge/-GitHub-black?style=flat-square&logo=github)
 
 ## 🆙 Demo
