@@ -11,4 +11,4 @@ Este App foi desenvolvido como teste para vaga de desenvolvedor React Native par
 
 ## 🆙 Demo
 
-<img src="https://user-images.githubusercontent.com/30902898/133513359-510f45de-64e7-4f54-8781-756c81b2599b.gif" width="800px">
+<img src="https://user-images.githubusercontent.com/30902898/133513359-510f45de-64e7-4f54-8781-756c81b2599b.gif" width="400px">
