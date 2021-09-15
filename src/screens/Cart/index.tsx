@@ -1,13 +1,13 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Text, ScrollView } from 'react-native';
 import LottieView from 'lottie-react-native';
 
 import { Feather } from '@expo/vector-icons';
 import bagError from '../../utils/bagError.json';
+import {createAndSavePDF} from '../../utils/generatePDF';
 
 import {
   Container,
-  HeaderContainer,
   ContainerProducts,
   Product,
   ProductInfo,
@@ -29,12 +29,50 @@ import {useCart} from '../../context/Cart'
 
 const Cart: React.FC = () => {
   const {totalValue, cart,remove} = useCart()
+  const [products,setProducts] = useState("")
+
+  useEffect(()=>{
+    let productsString = ''
+    cart.map((product)=>{
+      productsString = productsString + "<p>"+product.name + "_____R$ " + product.price + "<p/>"
+    })
+    setProducts(productsString)
+  },[products]);
+
+  const generatePDFfile = async () =>{
+    
+    const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pdf Content</title>
+        <style>
+            body {
+                font-size: 16px;
+                color: rgb(255, 196, 0);
+            }
+
+            h1 {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>COMPROVANTE DE COMPRA!</h1>
+        <br/>
+        ${products}
+        <br/>
+        <h5>TOTAL: R$ ${totalValue.toFixed(2)}</h5>
+    </body>
+    </html>
+`;
+    createAndSavePDF(htmlContent);
+  }
 
   return(
     <Container>
-    <HeaderContainer>
-      <Text>Carrinho</Text>
-    </HeaderContainer>
 
     {cart.length ? (
       <>
@@ -59,8 +97,8 @@ const Cart: React.FC = () => {
         <TotalContainer>
           <TotalText>TOTAL</TotalText>
           <TotalAmount>R$ {totalValue.toFixed(2)}</TotalAmount>
-          <Order>
-            <OrderText>FINALIZAR PEDIDO</OrderText>
+          <Order onPress={generatePDFfile}>
+            <OrderText>CHECKOUT</OrderText>
           </Order>
         </TotalContainer>
       </>

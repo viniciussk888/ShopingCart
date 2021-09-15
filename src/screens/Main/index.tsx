@@ -32,6 +32,7 @@ export const Main: React.FC = () => {
   const navigation = useNavigation();
   const {add, cart} = useCart()
   const [filterName,setFilterName] = useState("");
+  const [products,setProducts] = useState<productsType>(productsList);
 
   const navigateToLogin = useCallback(()=>{
     navigation.reset({
@@ -43,6 +44,12 @@ export const Main: React.FC = () => {
 
   const filterProducts = useCallback(()=>{
     const filteredProducts = productsList.filter(x => x.name === filterName)
+    if(filterName===""){
+      return setProducts(productsList)
+    }else if(filteredProducts.length===0){
+      return alert('Nenhum produto encontado!')
+    }
+    setProducts(filteredProducts)
   },[filterName])
 
   const renderProduct = useCallback(({ item }) => {
@@ -71,11 +78,11 @@ export const Main: React.FC = () => {
           <SimpleLineIcons onPress={navigateToLogin} name="logout" color="#454777" size={20} />
         </HeaderContainer>
 
-        <InputSeach placeholder="Buscar produtos" />
+        <InputSeach onChangeText={(text) => setFilterName(text)} onBlur={filterProducts} placeholder="Buscar produtos" />
 
         <FlatList
           horizontal
-          data={productsList}
+          data={products}
           keyExtractor={(item:productsType) => String(item.id)}
           renderItem={renderProduct}
         />
