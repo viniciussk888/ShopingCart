@@ -20,8 +20,15 @@ export default function CartProvider({children}){
         setCart([...newCart])
     }
 
+    function remove(id){
+        const newCart = cart;
+        newCart.splice(newCart.indexOf(id), 1);
+        setCart([...newCart])
+    }
+
     const store = {
         add,
+        remove,
         cart,
         totalValue
     }
@@ -36,9 +43,9 @@ export default function CartProvider({children}){
 export function useCart(){
     const context = useContext(CartContext)
 
-    const {cart,add,totalValue} = context
+    const {cart,add,remove,totalValue} = context
 
     return {
-        cart,add,totalValue
+        cart,add,remove,totalValue
     }
 }

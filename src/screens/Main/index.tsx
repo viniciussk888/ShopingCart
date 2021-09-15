@@ -17,12 +17,12 @@ import {
 } from './styles';
 import { useNavigation } from "@react-navigation/native";
 
-import productsMock from '../../mocks/products.json'
+import {productsList} from '../../mocks/products'
 
 import {useCart} from '../../context/Cart'
 
 type productsType = {
-  id:number,
+  id:string,
   name:string,
   price:number,
   image:string
@@ -31,7 +31,7 @@ type productsType = {
 export const Main: React.FC = () => {
   const navigation = useNavigation();
   const {add, cart} = useCart()
-  const [products] = useState<productsType>(productsMock);
+  const [filterName,setFilterName] = useState("");
 
   const navigateToLogin = useCallback(()=>{
     navigation.reset({
@@ -40,6 +40,10 @@ export const Main: React.FC = () => {
         }]
       })
   },[navigation])
+
+  const filterProducts = useCallback(()=>{
+    const filteredProducts = productsList.filter(x => x.name === filterName)
+  },[filterName])
 
   const renderProduct = useCallback(({ item }) => {
     return (
@@ -58,7 +62,7 @@ export const Main: React.FC = () => {
         </AddButton>
       </Product>
     );
-  },[]);
+  },[cart]);
 
   return(
     <Container>
@@ -71,7 +75,7 @@ export const Main: React.FC = () => {
 
         <FlatList
           horizontal
-          data={products}
+          data={productsList}
           keyExtractor={(item:productsType) => String(item.id)}
           renderItem={renderProduct}
         />
