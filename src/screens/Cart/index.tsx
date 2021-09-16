@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import { Text, ScrollView } from 'react-native';
-import LottieView from 'lottie-react-native';
+import React, { useEffect, useState } from "react";
+import { Text, ScrollView } from "react-native";
+import LottieView from "lottie-react-native";
 
-import { Feather } from '@expo/vector-icons';
-import bagError from '../../utils/bagError.json';
-import {createAndSavePDF} from '../../utils/generatePDF';
+import { Feather } from "@expo/vector-icons";
+import bagError from "../../utils/bagError.json";
+import { createAndSavePDF } from "../../utils/generatePDF";
 
 import {
   Container,
@@ -23,24 +23,25 @@ import {
   OrderText,
   EmptyContainer,
   EmptyText,
-} from './styles';
+} from "./styles";
 
-import {useCart} from '../../context/Cart'
+import { useCart } from "../../context/Cart";
 
 const Cart: React.FC = () => {
-  const {totalValue, cart,remove} = useCart()
-  const [products,setProducts] = useState("")
+  const { totalValue, cart, remove } = useCart();
+  const [products, setProducts] = useState("");
 
-  useEffect(()=>{
-    let productsString = ''
-    cart.map((product)=>{
-      productsString = productsString + "<p>"+product.name + "_____R$ " + product.price + "<p/>"
-    })
-    setProducts(productsString)
-  },[products]);
+  useEffect(() => {
+    let productsString = [];
+    cart.map((product) => {
+      productsString.push(
+        "<p>" + product.name + "_____R$ " + product.price + "<p/>"
+      );
+    });
+    setProducts(productsString.join(""));
+  }, [cart]);
 
-  const generatePDFfile = async () =>{
-    
+  const generatePDFfile = async () => {
     const htmlContent = `
     <!DOCTYPE html>
     <html lang="en">
@@ -69,47 +70,46 @@ const Cart: React.FC = () => {
     </html>
 `;
     createAndSavePDF(htmlContent);
-  }
+  };
 
-  return(
+  return (
     <Container>
-
-    {cart.length ? (
-      <>
-      <ScrollView>
-        <ContainerProducts>
-          {cart.map((product,index) => (
-            <Product key={product.id}>
-              <ProductInfo>
-                <ProductImage source={{ uri: product.image }} />
-                <ProductDetails>
-                  <ProductTitle>{product.name}</ProductTitle>
-                  <ProductPrice>R$ {product.price}</ProductPrice>
-                </ProductDetails>
-                <ProductDelete onPress={() => remove(index)}>
-                  <Feather name="trash-2" size={20} color="#454777" />
-                </ProductDelete>
-              </ProductInfo>
-            </Product>
-          ))}
-        </ContainerProducts>
-        </ ScrollView>
-        <TotalContainer>
-          <TotalText>TOTAL</TotalText>
-          <TotalAmount>R$ {totalValue.toFixed(2)}</TotalAmount>
-          <Order onPress={generatePDFfile}>
-            <OrderText>CHECKOUT</OrderText>
-          </Order>
-        </TotalContainer>
-      </>
-    ) : (
-      <EmptyContainer>
-        <LottieView source={bagError} resizeMode="contain" autoPlay loop />
-        <EmptyText>Seu carrinho está vazio.</EmptyText>
-      </EmptyContainer>
-    )}
-  </Container>
+      {cart.length ? (
+        <>
+          <ScrollView>
+            <ContainerProducts>
+              {cart.map((product, index) => (
+                <Product key={product.id}>
+                  <ProductInfo>
+                    <ProductImage source={{ uri: product.image }} />
+                    <ProductDetails>
+                      <ProductTitle>{product.name}</ProductTitle>
+                      <ProductPrice>R$ {product.price}</ProductPrice>
+                    </ProductDetails>
+                    <ProductDelete onPress={() => remove(index)}>
+                      <Feather name="trash-2" size={20} color="#454777" />
+                    </ProductDelete>
+                  </ProductInfo>
+                </Product>
+              ))}
+            </ContainerProducts>
+          </ScrollView>
+          <TotalContainer>
+            <TotalText>TOTAL</TotalText>
+            <TotalAmount>R$ {totalValue.toFixed(2)}</TotalAmount>
+            <Order onPress={generatePDFfile}>
+              <OrderText>CHECKOUT</OrderText>
+            </Order>
+          </TotalContainer>
+        </>
+      ) : (
+        <EmptyContainer>
+          <LottieView source={bagError} resizeMode="contain" autoPlay loop />
+          <EmptyText>Seu carrinho está vazio.</EmptyText>
+        </EmptyContainer>
+      )}
+    </Container>
   );
-}
+};
 
 export default Cart;
